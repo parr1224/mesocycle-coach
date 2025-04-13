@@ -1,10 +1,10 @@
-
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import './index.css'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App'; // ← This is the key import
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <div className="p-4 text-white">Hello from Mesocycle Tracker</div>
+    <App />
   </React.StrictMode>
-)
+);
