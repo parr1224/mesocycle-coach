@@ -158,7 +158,7 @@ function MesocycleView() {
                             placeholder="Exercise Name"
                             list={`exercise-options-${idx}-${exIdx}`}
                             value={exercise.name}
-                            onBlur={(e) => handleExerciseChange(idx, exIdx, e.target.value)}
+                            onChange={(e) => handleExerciseChange(idx, exIdx, e.target.value)}
                           />
                           <datalist id={`exercise-options-${idx}-${exIdx}`}>
                             {exerciseLibrary.map((ex, i) => (
@@ -193,17 +193,23 @@ function MesocycleView() {
         <h3 className="text-lg font-semibold mb-2">Add to Exercise Library</h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
           <input id="newName" className="p-2 rounded bg-gray-700 text-white" placeholder="Exercise Name" />
+          <input id="newType" className="p-2 rounded bg-gray-700 text-white" placeholder="Exercise Type (e.g., Machine)" />
+          <input id="newMuscle" className="p-2 rounded bg-gray-700 text-white" placeholder="Muscle Group (e.g., Chest)" />
         </div>
         <button
           className="mt-3 bg-blue-500 hover:bg-blue-600 text-white px-4 py-1 rounded text-sm"
           onClick={() => {
             const name = (document.getElementById('newName') as HTMLInputElement).value.trim();
+            const type = (document.getElementById('newType') as HTMLInputElement).value.trim();
+            const muscle = (document.getElementById('newMuscle') as HTMLInputElement).value.trim();
             if (name && !exerciseLibrary.includes(name)) {
               const updated = [...exerciseLibrary, name];
               setExerciseLibrary(updated);
               localStorage.setItem("exerciseLibrary", JSON.stringify(updated));
             }
             (document.getElementById('newName') as HTMLInputElement).value = "";
+            (document.getElementById('newType') as HTMLInputElement).value = "";
+            (document.getElementById('newMuscle') as HTMLInputElement).value = "";
           }}
         >
           ➕ Add to Library
