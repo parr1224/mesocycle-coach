@@ -5,38 +5,43 @@ import { presetTemplates } from "./utils/templates";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 function Home() {
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleUseTemplate = (template: any) => {
-    localStorage.setItem("selectedTemplate", JSON.stringify(template));
-    navigate("/mesocycle");
+  const goToTemplates = () => {
+    setMenuOpen(false);
+    navigate("/templates");
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold text-center">Mesocycle Coach</h1>
-        <p className="text-center text-gray-400 mt-1">Choose a template to begin</p>
-      </header>
-
-      <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {presetTemplates.map((template, index) => (
-          <div key={index} className="bg-gray-800 p-4 rounded-xl shadow hover:shadow-xl transition">
-            <h2 className="text-xl font-semibold mb-1">{template.name}</h2>
-            <p className="text-gray-400 text-sm mb-2">{template.weeks} weeks · {template.weekDetails[0].split}</p>
+    <div
+      className="min-h-screen bg-cover bg-center text-white"
+      style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1571019613914-85f342c0c21b)', backgroundSize: 'cover' }}
+    >
+      <div className="bg-black bg-opacity-60 min-h-screen p-6">
+        <header className="flex justify-between items-center mb-8">
+          <h1 className="text-4xl font-bold">Mesocycle Coach</h1>
+          <div>
             <button
-              onClick={() => handleUseTemplate(template)}
-              className="text-blue-400 hover:underline"
+              className="text-white text-2xl focus:outline-none"
+              onClick={() => setMenuOpen(!menuOpen)}
             >
-              Use this template
+              ☰
             </button>
+            {menuOpen && (
+              <div className="absolute right-6 mt-2 bg-gray-800 shadow rounded w-48 z-10">
+                <button
+                  className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700"
+                  onClick={goToTemplates}
+                >
+                  Templates
+                </button>
+              </div>
+            )}
           </div>
-        ))}
-      </main>
-
-      <footer className="mt-12 text-center text-sm text-gray-600">
-        &copy; {new Date().getFullYear()} Mesocycle Coach
-      </footer>
+        </header>
+      </div>
+    </div>
     </div>
   );
 }
@@ -62,8 +67,39 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/mesocycle" element={<MesocycleView />} />
+        <Route path="/templates" element={<TemplatesPage />} />
       </Routes>
     </Router>
+  );
+}
+
+function TemplatesPage() {
+  const navigate = useNavigate();
+  const handleUseTemplate = (template: any) => {
+    localStorage.setItem("selectedTemplate", JSON.stringify(template));
+    navigate("/mesocycle");
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-900 text-white p-6">
+      <header className="mb-8">
+        <h1 className="text-3xl font-bold text-center">Templates</h1>
+      </header>
+      <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {presetTemplates.map((template, index) => (
+          <div key={index} className="bg-gray-800 p-4 rounded-xl shadow hover:shadow-xl transition">
+            <h2 className="text-xl font-semibold mb-1">{template.name}</h2>
+            <p className="text-gray-400 text-sm mb-2">{template.weeks} weeks · {template.weekDetails[0].split}</p>
+            <button
+              onClick={() => handleUseTemplate(template)}
+              className="text-blue-400 hover:underline"
+            >
+              Use this template
+            </button>
+          </div>
+        ))}
+      </main>
+    </div>
   );
 }
 
@@ -166,13 +202,13 @@ function MesocycleView() {
                             ))}
                           </datalist>
                           <div className="sm:ml-auto">
-                          <button
-                            onClick={() => handleDeleteExercise(idx, exIdx)}
-                            className="text-red-400 text-sm"
-                          >
-                            ✖
-                          </button>
-                        </div>
+                            <button
+                              onClick={() => handleDeleteExercise(idx, exIdx)}
+                              className="text-red-400 text-sm"
+                            >
+                              ✖
+                            </button>
+                          </div>
                         </div>
                       )}
                     </Draggable>
