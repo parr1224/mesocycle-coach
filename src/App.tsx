@@ -46,6 +46,11 @@ function MesocycleView() {
     return saved ? JSON.parse(saved) : {};
   });
 
+  const [exerciseLibrary, setExerciseLibrary] = useState<string[]>(() => {
+    const saved = localStorage.getItem("exerciseLibrary");
+    return saved ? JSON.parse(saved) : [];
+  });
+
   const handleAddExercise = (dayIndex: number) => {
     const updatedTemplate = { ...template };
     const week0 = updatedTemplate.weekDetails[0];
@@ -57,7 +62,16 @@ function MesocycleView() {
 
   const handleExerciseChange = (dayIndex: number, exIndex: number, field: string, value: string) => {
     const updatedTemplate = { ...template };
-    updatedTemplate.weekDetails[0].days[dayIndex].exercises[exIndex][field] = value;
+    const exercise = updatedTemplate.weekDetails[0].days[dayIndex].exercises[exIndex];
+    exercise[field] = value;
+
+    // Save new exercise name to localStorage if it's a new name
+    if (field === "name" && value.trim() && !exerciseLibrary.includes(value.trim())) {
+      const updatedLibrary = [...exerciseLibrary, value.trim()];
+      setExerciseLibrary(updatedLibrary);
+      localStorage.setItem("exerciseLibrary", JSON.stringify(updatedLibrary));
+    }
+
     setTemplate(updatedTemplate);
     localStorage.setItem("selectedTemplate", JSON.stringify(updatedTemplate));
   };
@@ -75,6 +89,7 @@ function MesocycleView() {
                 <div key={exIdx} className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                   <input
                     type="text"
+                    list="exercise-options"
                     className="p-2 rounded bg-gray-700 text-white"
                     placeholder="Exercise Name"
                     value={exercise.name}
@@ -106,6 +121,13 @@ function MesocycleView() {
           </div>
         ))}
       </div>
+
+      {/* Datalist for exercise name suggestions */}
+      <datalist id="exercise-options">
+        {exerciseLibrary.map((exName, i) => (
+          <option key={i} value={exName} />
+        ))}
+      </datalist>
     </div>
   );
 }
