@@ -83,6 +83,9 @@ function MesocycleView() {
     localStorage.removeItem("exerciseLibrary");
     localStorage.removeItem("typeLibrary");
     localStorage.removeItem("muscleLibrary");
+    setExerciseLibrary([]);
+    setTypeLibrary([]);
+    setMuscleLibrary([]);
   }, []);
 
   const handleAddExercise = (dayIndex: number) => {
@@ -113,7 +116,13 @@ function MesocycleView() {
     };
 
     const [lib, setLib, key] = libraries[field];
-    if (value.trim() && !lib.includes(value.trim())) {
+
+    const shouldAddToLibrary =
+      value.trim().length >= 3 &&                       // Only save full/meaningful entries
+      !lib.includes(value.trim()) &&
+      !lib.some((item) => value.trim().startsWith(item)); // Avoid prefix duplicates
+
+    if (shouldAddToLibrary) {
       const updated = [...lib, value.trim()];
       setLib(updated);
       localStorage.setItem(key, JSON.stringify(updated));
