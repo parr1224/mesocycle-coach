@@ -16,7 +16,7 @@ function Home() {
   return (
     <div
       className="min-h-screen bg-cover bg-center text-white"
-      style={{ backgroundImage: "url('https://images.unsplash.com/photo-1571019613914-85f342c0c21b?auto=format&fit=crop&w=1400&q=80')", backgroundSize: 'cover', backgroundPosition: 'center' }}}
+      style={{ backgroundImage: "url('https://images.unsplash.com/photo-1571019613914-85f342c0c21b?auto=format&fit=crop&w=1400&q=80')", backgroundSize: 'cover', backgroundPosition: 'center' }}
     >
       <div className="bg-black bg-opacity-60 min-h-screen p-6">
         <header className="flex justify-between items-center mb-8">
@@ -41,7 +41,6 @@ function Home() {
           </div>
         </header>
       </div>
-    </div>
     </div>
   );
 }
