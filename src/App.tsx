@@ -29,14 +29,39 @@ function Home() {
               ☰
             </button>
             {menuOpen && (
-              <div className="absolute right-6 mt-2 bg-gray-800 shadow rounded w-48 z-10">
-                <button
-                  className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700"
-                  onClick={goToTemplates}
-                >
-                  Templates
-                </button>
-              </div>
+              <div className="absolute right-6 mt-2 w-52 rounded-md shadow-lg z-10 origin-top-right bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+  <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="menu-button">
+    <button
+      className="text-left w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+      role="menuitem"
+      onClick={goToTemplates}
+    >
+      📁 Templates</button>
+    <button
+      className="text-left w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+      role="menuitem"
+      onClick={() => {
+        setMenuOpen(false);
+        navigate("/exercise-library");
+      }}
+    >
+      🏋️ Exercise Library</button>
+    <button
+      className="text-left w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+      role="menuitem"
+      onClick={() => alert('Coming soon!')}
+    >
+      🧠 Tips & Tricks
+    </button>
+    <button
+      className="text-left w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+      role="menuitem"
+      onClick={() => alert('Settings coming soon!')}
+    >
+      ⚙️ Settings
+    </button>
+  </div>
+</div>
             )}
           </div>
         </header>
@@ -67,6 +92,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/mesocycle" element={<MesocycleView />} />
         <Route path="/templates" element={<TemplatesPage />} />
+              <Route path="/exercise-library" element={<ExerciseLibrary />} />
       </Routes>
     </Router>
   );
@@ -98,6 +124,28 @@ function TemplatesPage() {
           </div>
         ))}
       </main>
+    </div>
+  );
+}
+
+function ExerciseLibrary() {
+  const [library, setLibrary] = useState<string[]>(() => {
+    const saved = localStorage.getItem("exerciseLibrary");
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  return (
+    <div className="min-h-screen bg-gray-900 text-white p-6">
+      <h1 className="text-3xl font-bold mb-4">Exercise Library</h1>
+      {library.length === 0 ? (
+        <p className="text-gray-400">No exercises added yet.</p>
+      ) : (
+        <ul className="list-disc pl-6 space-y-1">
+          {library.map((ex, i) => (
+            <li key={i}>{ex}</li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
