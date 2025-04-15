@@ -65,7 +65,6 @@ function MesocycleView() {
     const exercise = updatedTemplate.weekDetails[0].days[dayIndex].exercises[exIndex];
     exercise[field] = value;
 
-    // Save new exercise name to localStorage if it's a new name
     if (field === "name" && value.trim() && !exerciseLibrary.includes(value.trim())) {
       const updatedLibrary = [...exerciseLibrary, value.trim()];
       setExerciseLibrary(updatedLibrary);
@@ -87,14 +86,20 @@ function MesocycleView() {
             <div className="space-y-2">
               {day.exercises.map((exercise: any, exIdx: number) => (
                 <div key={exIdx} className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  <input
-                    type="text"
-                    list="exercise-options"
+                  <select
                     className="p-2 rounded bg-gray-700 text-white"
-                    placeholder="Exercise Name"
                     value={exercise.name}
                     onChange={(e) => handleExerciseChange(idx, exIdx, "name", e.target.value)}
-                  />
+                  >
+                    <option value="">Select Exercise</option>
+                    {exerciseLibrary.map((ex, i) => (
+                      <option key={i} value={ex}>{ex}</option>
+                    ))}
+                    {!exerciseLibrary.includes(exercise.name) && exercise.name && (
+                      <option value={exercise.name}>{exercise.name}</option>
+                    )}
+                  </select>
+
                   <input
                     type="text"
                     className="p-2 rounded bg-gray-700 text-white"
@@ -121,13 +126,6 @@ function MesocycleView() {
           </div>
         ))}
       </div>
-
-      {/* Datalist for exercise name suggestions */}
-      <datalist id="exercise-options">
-        {exerciseLibrary.map((exName, i) => (
-          <option key={i} value={exName} />
-        ))}
-      </datalist>
     </div>
   );
 }
