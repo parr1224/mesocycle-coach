@@ -49,7 +49,7 @@ function exportToClipboard(template: any) {
   template.weekDetails[0].days.forEach((day: any) => {
     lines.push(`## ${day.label}`);
     day.exercises.forEach((ex: any, i: number) => {
-      lines.push(`- ${ex.name || "[Exercise]"} (${ex.type || "type"}, ${ex.muscleGroup || "group"})`);
+      lines.push(`- ${ex.name || "[Exercise]"}`);
     });
     lines.push("");
   });
@@ -76,22 +76,16 @@ function MesocycleView() {
   });
 
   const [exerciseLibrary, setExerciseLibrary] = useState<string[]>([]);
-  const [typeLibrary, setTypeLibrary] = useState<string[]>([]);
-  const [muscleLibrary, setMuscleLibrary] = useState<string[]>([]);
 
   useEffect(() => {
     localStorage.removeItem("exerciseLibrary");
-    localStorage.removeItem("typeLibrary");
-    localStorage.removeItem("muscleLibrary");
     setExerciseLibrary([]);
-    setTypeLibrary([]);
-    setMuscleLibrary([]);
   }, []);
 
   const handleAddExercise = (dayIndex: number) => {
     const updatedTemplate = { ...template };
     const day = updatedTemplate.weekDetails[0].days[dayIndex];
-    day.exercises.push({ name: "", type: "", muscleGroup: "" });
+    day.exercises.push({ name: "" });
     setTemplate(updatedTemplate);
     localStorage.setItem("selectedTemplate", JSON.stringify(updatedTemplate));
   };
@@ -104,28 +98,15 @@ function MesocycleView() {
     localStorage.setItem("selectedTemplate", JSON.stringify(updatedTemplate));
   };
 
-  const handleExerciseChange = (dayIndex: number, exIndex: number, field: string, value: string) => {
+  const handleExerciseChange = (dayIndex: number, exIndex: number, value: string) => {
     const updatedTemplate = { ...template };
     const exercise = updatedTemplate.weekDetails[0].days[dayIndex].exercises[exIndex];
-    exercise[field] = value;
+    exercise.name = value;
 
-    const libraries = {
-      name: [exerciseLibrary, setExerciseLibrary, "exerciseLibrary"],
-      type: [typeLibrary, setTypeLibrary, "typeLibrary"],
-      muscleGroup: [muscleLibrary, setMuscleLibrary, "muscleLibrary"]
-    };
-
-    const [lib, setLib, key] = libraries[field];
-
-    const shouldAddToLibrary =
-      value.trim().length >= 3 &&                       // Only save full/meaningful entries
-      !lib.includes(value.trim()) &&
-      !lib.some((item) => value.trim().startsWith(item)); // Avoid prefix duplicates
-
-    if (shouldAddToLibrary) {
-      const updated = [...lib, value.trim()];
-      setLib(updated);
-      localStorage.setItem(key, JSON.stringify(updated));
+    if (value.trim().length >= 3 && !exerciseLibrary.includes(value.trim())) {
+      const updated = [...exerciseLibrary, value.trim()];
+      setExerciseLibrary(updated);
+      localStorage.setItem("exerciseLibrary", JSON.stringify(updated));
     }
 
     setTemplate(updatedTemplate);
@@ -172,43 +153,24 @@ function MesocycleView() {
                           {...provided.dragHandleProps}
                           className="grid grid-cols-1 sm:grid-cols-3 gap-2 items-center bg-gray-700 p-2 rounded"
                         >
-                          $1
-                            onBlur={(e) => handleExerciseChange(idx, exIdx, "name", e.target.value)}
-                            
+                          <input
+                            className="p-2 rounded bg-gray-800 text-white"
+                            placeholder="Exercise Name"
+                            list={`exercise-options-${idx}-${exIdx}`}
+                            value={exercise.name}
+                            onBlur={(e) => handleExerciseChange(idx, exIdx, e.target.value)}
                           />
                           <datalist id={`exercise-options-${idx}-${exIdx}`}>
                             {exerciseLibrary.map((ex, i) => (
                               <option key={i} value={ex} />
                             ))}
                           </datalist>
-
-                          $1
-                            onBlur={(e) => handleExerciseChange(idx, exIdx, "type", e.target.value)}
-                            
-                          />
-                          <datalist id={`type-options-${idx}-${exIdx}`}>
-                            {typeLibrary.map((type, i) => (
-                              <option key={i} value={type} />
-                            ))}
-                          </datalist>
-
-                          <div className="flex gap-2">
-                            $1
-                            onBlur={(e) => handleExerciseChange(idx, exIdx, "muscleGroup", e.target.value)}
-                              
-                            />
-                            <datalist id={`muscle-options-${idx}-${exIdx}`}>
-                              {muscleLibrary.map((muscle, i) => (
-                                <option key={i} value={muscle} />
-                              ))}
-                            </datalist>
-                            <button
-                              onClick={() => handleDeleteExercise(idx, exIdx)}
-                              className="text-red-400 text-sm"
-                            >
-                              ✖
-                            </button>
-                          </div>
+                          <button
+                            onClick={() => handleDeleteExercise(idx, exIdx)}
+                            className="text-red-400 text-sm"
+                          >
+                            ✖
+                          </button>
                         </div>
                       )}
                     </Draggable>
@@ -226,6 +188,27 @@ function MesocycleView() {
           </button>
         </div>
       ))}
+
+      <div className="mt-10 p-4 bg-gray-800 rounded">
+        <h3 className="text-lg font-semibold mb-2">Add to Exercise Library</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <input id="newName" className="p-2 rounded bg-gray-700 text-white" placeholder="Exercise Name" />
+        </div>
+        <button
+          className="mt-3 bg-blue-500 hover:bg-blue-600 text-white px-4 py-1 rounded text-sm"
+          onClick={() => {
+            const name = (document.getElementById('newName') as HTMLInputElement).value.trim();
+            if (name && !exerciseLibrary.includes(name)) {
+              const updated = [...exerciseLibrary, name];
+              setExerciseLibrary(updated);
+              localStorage.setItem("exerciseLibrary", JSON.stringify(updated));
+            }
+            (document.getElementById('newName') as HTMLInputElement).value = "";
+          }}
+        >
+          ➕ Add to Library
+        </button>
+      </div>
     </div>
   );
 }
