@@ -107,23 +107,43 @@ function TemplatesPage() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-6">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold text-center">Templates</h1>
-      </header>
-      <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {presetTemplates.map((template, index) => (
-          <div key={index} className="bg-gray-800 p-4 rounded-xl shadow hover:shadow-xl transition">
-            <h2 className="text-xl font-semibold mb-1">{template.name}</h2>
-            <p className="text-gray-400 text-sm mb-2">{template.weeks} weeks · {template.weekDetails[0].split}</p>
-            <button
-              onClick={() => handleUseTemplate(template)}
-              className="text-blue-400 hover:underline"
-            >
-              Use this template
-            </button>
-          </div>
-        ))}
-      </main>
+      <h1 className="text-3xl font-bold mb-4">Exercise Library</h1>
+      {library.length === 0 ? (
+        <p className="text-gray-400">No exercises added yet.</p>
+      ) : (
+        <ul className="list-disc pl-6 space-y-1">
+          {library.map((ex, i) => (
+            <li key={i}>{ex}</li>
+          ))}
+        </ul>
+      )}
+
+      <div className="mt-10 p-4 bg-gray-800 rounded">
+        <h3 className="text-lg font-semibold mb-2">Add to Exercise Library</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <input id="newName" className="p-2 rounded bg-gray-700 text-white" placeholder="Exercise Name" />
+          <input id="newType" className="p-2 rounded bg-gray-700 text-white" placeholder="Exercise Type (e.g., Machine)" />
+          <input id="newMuscle" className="p-2 rounded bg-gray-700 text-white" placeholder="Muscle Group (e.g., Chest)" />
+        </div>
+        <button
+          className="mt-3 bg-blue-500 hover:bg-blue-600 text-white px-4 py-1 rounded text-sm"
+          onClick={() => {
+            const name = (document.getElementById('newName') as HTMLInputElement).value.trim();
+            const type = (document.getElementById('newType') as HTMLInputElement).value.trim();
+            const muscle = (document.getElementById('newMuscle') as HTMLInputElement).value.trim();
+            if (name && !library.includes(name)) {
+              const updated = [...library, name];
+              setLibrary(updated);
+              localStorage.setItem("exerciseLibrary", JSON.stringify(updated));
+            }
+            (document.getElementById('newName') as HTMLInputElement).value = "";
+            (document.getElementById('newType') as HTMLInputElement).value = "";
+            (document.getElementById('newMuscle') as HTMLInputElement).value = "";
+          }}
+        >
+          ➕ Add to Library
+        </button>
+      </div>
     </div>
   );
 }
