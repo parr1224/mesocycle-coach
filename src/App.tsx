@@ -1,5 +1,4 @@
 // src/App.tsx
-// src/App.tsx
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { presetTemplates } from "./utils/templates";
