@@ -151,7 +151,7 @@ function MesocycleView() {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="grid grid-cols-1 sm:grid-cols-3 gap-2 items-center bg-gray-700 p-2 rounded"
+                          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 bg-gray-700 p-2 rounded"
                         >
                           <input
                             className="p-2 rounded bg-gray-800 text-white"
@@ -165,12 +165,14 @@ function MesocycleView() {
                               <option key={i} value={ex} />
                             ))}
                           </datalist>
+                          <div className="sm:ml-auto">
                           <button
                             onClick={() => handleDeleteExercise(idx, exIdx)}
                             className="text-red-400 text-sm"
                           >
                             ✖
                           </button>
+                        </div>
                         </div>
                       )}
                     </Draggable>
