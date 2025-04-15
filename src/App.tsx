@@ -42,7 +42,6 @@ function Home() {
         </header>
       </div>
     </div>
-    </div>
   );
 }
 
