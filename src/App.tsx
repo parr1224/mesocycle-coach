@@ -172,12 +172,9 @@ function MesocycleView() {
                           {...provided.dragHandleProps}
                           className="grid grid-cols-1 sm:grid-cols-3 gap-2 items-center bg-gray-700 p-2 rounded"
                         >
-                          <input
-                            className="p-2 rounded bg-gray-800 text-white"
-                            placeholder="Exercise Name"
-                            list={`exercise-options-${idx}-${exIdx}`}
-                            value={exercise.name}
-                            onChange={(e) => handleExerciseChange(idx, exIdx, "name", e.target.value)}
+                          $1
+                            onBlur={(e) => handleExerciseChange(idx, exIdx, "name", e.target.value)}
+                            
                           />
                           <datalist id={`exercise-options-${idx}-${exIdx}`}>
                             {exerciseLibrary.map((ex, i) => (
@@ -185,12 +182,9 @@ function MesocycleView() {
                             ))}
                           </datalist>
 
-                          <input
-                            className="p-2 rounded bg-gray-800 text-white"
-                            placeholder="Type (e.g., Machine)"
-                            list={`type-options-${idx}-${exIdx}`}
-                            value={exercise.type}
-                            onChange={(e) => handleExerciseChange(idx, exIdx, "type", e.target.value)}
+                          $1
+                            onBlur={(e) => handleExerciseChange(idx, exIdx, "type", e.target.value)}
+                            
                           />
                           <datalist id={`type-options-${idx}-${exIdx}`}>
                             {typeLibrary.map((type, i) => (
@@ -199,12 +193,9 @@ function MesocycleView() {
                           </datalist>
 
                           <div className="flex gap-2">
-                            <input
-                              className="p-2 rounded bg-gray-800 text-white w-full"
-                              placeholder="Muscle Group"
-                              list={`muscle-options-${idx}-${exIdx}`}
-                              value={exercise.muscleGroup}
-                              onChange={(e) => handleExerciseChange(idx, exIdx, "muscleGroup", e.target.value)}
+                            $1
+                            onBlur={(e) => handleExerciseChange(idx, exIdx, "muscleGroup", e.target.value)}
+                              
                             />
                             <datalist id={`muscle-options-${idx}-${exIdx}`}>
                               {muscleLibrary.map((muscle, i) => (
